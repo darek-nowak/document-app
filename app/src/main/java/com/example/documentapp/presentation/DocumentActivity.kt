@@ -24,7 +24,7 @@ class DocumentActivity : AppCompatActivity(), DocumentView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_document)
-        setSupportActionBar(findViewById(R.id.toolbar))
+        setSupportActionBar(toolbar)
 
         DocumentApplication.applicationComponent
             .documentScreenComponent().create()
