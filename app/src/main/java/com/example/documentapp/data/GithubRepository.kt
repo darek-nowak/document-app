@@ -24,7 +24,7 @@ class GithubRepository @Inject constructor(
     }
 }
 
-public interface GitHubApi {
+interface GitHubApi {
     @GET("users/$USER/repos")
     fun listRepos(): Single<List<Repo>>
 
