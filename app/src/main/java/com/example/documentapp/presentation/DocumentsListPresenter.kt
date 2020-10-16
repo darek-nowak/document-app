@@ -1,8 +1,11 @@
 package com.example.documentapp.presentation
+
+import android.util.Log
 import com.example.documentapp.data.CvDocumentInfo
 import com.example.documentapp.data.DocumentListsInteractor
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposables
+import timber.log.Timber
 import javax.inject.Inject
 
 class DocumentsListPresenter @Inject constructor(
@@ -23,8 +26,7 @@ class DocumentsListPresenter @Inject constructor(
             .doOnSubscribe { view?.showProgress() }
             .subscribe(
                 { data -> view?.showDocsListData(data) },
-                { t ->
-                    view?.showError() }
+                { view?.showError() }
             )
     }
 

@@ -5,6 +5,7 @@ import com.example.documentapp.data.DocumentDisplayItem
 import com.example.documentapp.data.DocumentInteractor
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposables
+import timber.log.Timber
 import javax.inject.Inject
 
 class DocumentPresenter @Inject constructor(
