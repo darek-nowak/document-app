@@ -13,8 +13,8 @@ class GithubRepository @Inject constructor(
     private val base64Decoder: Base64Decoder,
     private val jsonObjectMapper: ObjectMapper
 ) {
-    fun fetchDocument(): Single<CvData> {
-        return api.getFileContent(file = "dariusz_nowak.json")
+    fun fetchDocument(filename: String): Single<CvData> {
+        return api.getFileContent(file = filename)
             .map { response ->
                 base64Decoder.decode(response.content)
             }
@@ -22,14 +22,18 @@ class GithubRepository @Inject constructor(
                 jsonObjectMapper.readValue(it, CvData::class.java)
             }
     }
+
+    fun fetchDocumentsList(): Single<List<FileInfo>> {
+        return api.getFilesList()
+    }
 }
 
 interface GitHubApi {
-    @GET("users/$USER/repos")
-    fun listRepos(): Single<List<Repo>>
+    @GET("repos/$USER/$DOC_REPO/contents")
+    fun getFilesList(): Single<List<FileInfo>>
 
     @GET("repos/$USER/$DOC_REPO/contents/{file}")
-    fun getFileContent(@Path("file") file: String): Single<Content>
+    fun getFileContent(@Path("file") file: String): Single<FileContent>
 
     companion object {
         const val USER = "darek-nowak"
@@ -38,12 +42,12 @@ interface GitHubApi {
 }
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-data class Repo(
-    @JsonProperty("name") val name: String
+data class  FileInfo(
+    @JsonProperty("name") val filename: String
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-data class Content(
+data class FileContent(
     @JsonProperty("encoding") val encoding: String,
     @JsonProperty("content") val content: String
 )

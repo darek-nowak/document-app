@@ -1,11 +1,9 @@
 package com.example.documentapp.presentation
 
+import com.example.documentapp.data.CvDocumentInfo
 import com.example.documentapp.data.DocumentInteractor
 import com.example.documentapp.data.DocumentDisplayItem
-import com.nhaarman.mockito_kotlin.given
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.reset
-import com.nhaarman.mockito_kotlin.verify
+import com.nhaarman.mockito_kotlin.*
 import io.reactivex.Single
 import io.reactivex.android.plugins.RxAndroidPlugins
 import io.reactivex.schedulers.Schedulers
@@ -26,51 +24,40 @@ internal class DocumentPresenterTest {
 
     @Test
     fun `call document interactor and show returned data when data arrived`() {
-        given(interactor.getCvDocument()).willReturn(
+        given(interactor.getCvDocument(DOC_FILENAME)).willReturn(
             Single.just(SAMPLE_DOC_DATA)
         )
 
-        presenter.attachView(view)
+        presenter.attachView(view, CV_DOC_INFO)
 
         verify(view).showData(SAMPLE_DOC_DATA)
     }
 
     @Test
     fun `call document interactor and show error when error occurred`() {
-        given(interactor.getCvDocument()).willReturn(
+        given(interactor.getCvDocument(DOC_FILENAME)).willReturn(
             Single.error(Throwable("Error"))
         )
 
-        presenter.attachView(view)
+        presenter.attachView(view, CV_DOC_INFO)
 
         verify(view).showError()
     }
 
     @Test
     fun `show progress when loading data`() {
-        given(interactor.getCvDocument()).willReturn(
+        given(interactor.getCvDocument(DOC_FILENAME)).willReturn(
             Single.just(SAMPLE_DOC_DATA)
         )
 
-        presenter.attachView(view)
+        presenter.attachView(view, CV_DOC_INFO)
 
         verify(view).showProgress()
     }
 
-    @Test
-    fun `fetch data again when reload is called`() {
-        given(interactor.getCvDocument()).willReturn(
-            Single.just(SAMPLE_DOC_DATA)
-        )
-        presenter.attachView(view)
-        reset(view)
-
-        presenter.reloadDocument()
-
-        verify(view).showData(SAMPLE_DOC_DATA)
-    }
-
     private companion object {
+        const val DOC_FILENAME = "Sir_Richard.json"
+        val CV_DOC_INFO = CvDocumentInfo("Sir_Richard.json", "Sir Richard")
         val SAMPLE_DOC_DATA = listOf(DocumentDisplayItem.ExtraBigItem("Sir Richard"))
     }
 }

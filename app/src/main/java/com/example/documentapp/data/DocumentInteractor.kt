@@ -6,7 +6,7 @@ import javax.inject.Inject
 class DocumentInteractor @Inject constructor(
     private val docRepository: GithubRepository
 ) {
-    fun getCvDocument(): Single<List<DocumentDisplayItem>> = docRepository.fetchDocument()
+    fun getCvDocument(filename: String): Single<List<DocumentDisplayItem>> = docRepository.fetchDocument(filename)
         .map { cvData -> cvData.toDocumentDisplayItems() }
 
     private fun CvData.toDocumentDisplayItems() = mutableListOf(

@@ -13,11 +13,11 @@ internal class DocumentInteractorTest {
 
     @Test
     fun `provide list of document items mapped from CvData`() {
-        given(docRepository.fetchDocument()).willReturn(
+        given(docRepository.fetchDocument("filename")).willReturn(
             Single.just(CV_DATA_MODEL)
         )
 
-        val tested = interactor.getCvDocument().test()
+        val tested = interactor.getCvDocument("filename").test()
 
         tested.assertValue(
             listOf(

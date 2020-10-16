@@ -101,6 +101,7 @@ class DocumentItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         documentItem.text = name
     }
 }
+
 class DocumentHeaderViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     private val header = view.header
     fun bind(name: String) {

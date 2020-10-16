@@ -21,20 +21,35 @@ internal class GithubRepositoryTest {
 
     @Test
     fun `map encoded content string to document data model`() {
-        given(api.getFileContent("dariusz_nowak.json")).willReturn(
+        given(api.getFileContent("pan_cogito.json")).willReturn(
             Single.just(
-                Content(
+                FileContent(
                     encoding = "base64",
                     content = ENCODED_CONTENT
                 )
             ))
         given(base64Decoder.decode(ENCODED_CONTENT)).willReturn(CV_APPLICANT_JSON)
 
-        val tested = repository.fetchDocument()
+        val tested = repository.fetchDocument("pan_cogito.json")
             .test()
 
         tested.assertValue(CV_DATA_MODEL)
 
+    }
+
+    @Test
+    fun `return list of FileInfo when called to fetch documents list`() {
+        given(api.getFilesList()).willReturn(
+            Single.just(
+                listOf(FileInfo("pan_cogito.json"))
+            )
+        )
+
+        val tested = repository.fetchDocumentsList().test()
+
+        tested.assertValue(
+            listOf(FileInfo("pan_cogito.json"))
+        )
     }
 
     companion object {

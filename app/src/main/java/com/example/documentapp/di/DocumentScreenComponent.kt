@@ -1,7 +1,9 @@
 package com.example.documentapp.di
 
-import com.example.documentapp.presentation.DocumentActivity
+import com.example.documentapp.presentation.DocumentsContainerActivity
 import com.example.documentapp.data.GitHubApi
+import com.example.documentapp.presentation.DocumentFragment
+import com.example.documentapp.presentation.DocumentsListFragment
 import dagger.Module
 import dagger.Provides
 import dagger.Subcomponent
@@ -14,7 +16,10 @@ interface DocumentScreenComponent {
         fun create(): DocumentScreenComponent
     }
 
-    fun inject(activity: DocumentActivity)
+    fun inject(activity: DocumentsContainerActivity)
+    fun inject(documentFragment: DocumentFragment)
+    fun inject(documentsListFragment: DocumentsListFragment)
+
 }
 
 @Module(subcomponents = [ DocumentScreenComponent::class ])
