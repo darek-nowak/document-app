@@ -25,10 +25,15 @@ class DocumentPresenter @Inject constructor(
         disposable = docInteractor.getCvDocument(filename)
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe { view?.showProgress() }
-            .subscribe(
-                { data -> view?.showData(data) },
-                { view?.showError() }
-            )
+            .subscribe(::onData, ::onError)
+    }
+
+    private fun onData(data: List<DocumentDisplayItem>) {
+        view?.showData(data)
+    }
+
+    private fun onError(error: Throwable) {
+        view?.showError()
     }
 
     fun detachView() {

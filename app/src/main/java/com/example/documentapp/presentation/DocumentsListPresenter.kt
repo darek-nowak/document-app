@@ -2,6 +2,7 @@ package com.example.documentapp.presentation
 
 import android.util.Log
 import com.example.documentapp.data.CvDocumentInfo
+import com.example.documentapp.data.DocumentDisplayItem
 import com.example.documentapp.data.DocumentListsInteractor
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposables
@@ -24,10 +25,15 @@ class DocumentsListPresenter @Inject constructor(
         disposable = docsListInteractor.getCvDocumentsList()
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe { view?.showProgress() }
-            .subscribe(
-                { data -> view?.showDocsListData(data) },
-                { view?.showError() }
-            )
+            .subscribe(::onData, ::onError)
+    }
+
+    private fun onData(data: List<CvDocumentInfo>) {
+        view?.showDocsListData(data)
+    }
+
+    private fun onError(error: Throwable) {
+        view?.showError()
     }
 
     fun detachView() {
