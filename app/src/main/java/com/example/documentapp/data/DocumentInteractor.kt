@@ -20,7 +20,7 @@ class DocumentInteractor @Inject constructor(
             add(DocumentDisplayItem.BigItem(item.company))
             add(DocumentDisplayItem.BigItem(item.role))
             item.responsibilities.forEach {
-                add(DocumentDisplayItem.Item(it))
+                add(DocumentDisplayItem.Item("• $it"))
             }
         }
     }
