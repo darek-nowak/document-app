@@ -2,7 +2,7 @@ document-app
 =========
 
 Application demonstrating Android tools of the trade for creating simple two fragment application.
-It that fetches list of document CV filenames from github and presents it on list fragment and details screen
+It fetches list of document CV filenames from github and presents it on list fragment and details screen
 fragment.
 
 What was done:
