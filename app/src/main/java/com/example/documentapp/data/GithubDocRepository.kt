@@ -1,5 +1,6 @@
 package com.example.documentapp.data
 
+import android.util.Log
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -23,9 +24,7 @@ class GithubRepository @Inject constructor(
             }
     }
 
-    fun fetchDocumentsList(): Single<List<FileInfo>> {
-        return api.getFilesList()
-    }
+    fun fetchDocumentsList(): Single<List<FileInfo>> = api.getFilesList()
 }
 
 interface GitHubApi {

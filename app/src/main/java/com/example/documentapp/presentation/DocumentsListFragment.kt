@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.documentapp.R
 import com.example.documentapp.data.CvDocumentInfo
+import com.example.documentapp.di.DocumentScreenComponentHolder
 import kotlinx.android.synthetic.main.fragment_document_list.*
 import kotlinx.android.synthetic.main.fragment_document_list.errorView
 import kotlinx.android.synthetic.main.fragment_document_list.progressBar
@@ -33,7 +34,7 @@ class DocumentsListFragment: Fragment(), DocumentsListView {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        (activity as DocumentsContainerActivity).component.inject(this)
+        DocumentScreenComponentHolder.getComponent(requireActivity()).inject(this)
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
         initDocsInfoRecyclerView()
         setTitle()
