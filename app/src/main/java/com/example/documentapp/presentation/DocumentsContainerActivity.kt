@@ -3,24 +3,16 @@ package com.example.documentapp.presentation
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import com.example.documentapp.DocumentApplication
 import com.example.documentapp.R
 import com.example.documentapp.data.CvDocumentInfo
-import com.example.documentapp.di.DocumentScreenComponent
 import kotlinx.android.synthetic.main.activity_document_container.*
 
 class DocumentsContainerActivity : AppCompatActivity() {
-
-    lateinit var component: DocumentScreenComponent
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_document_container)
         setSupportActionBar(toolbar)
-
-        component = DocumentApplication.applicationComponent
-            .documentScreenComponent().create()
-        component.inject(this)
 
         DocumentsListFragment.attachIfNeeded(
             R.id.documentContainer,

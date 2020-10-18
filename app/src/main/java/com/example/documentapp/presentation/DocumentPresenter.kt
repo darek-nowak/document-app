@@ -3,9 +3,9 @@ package com.example.documentapp.presentation
 import com.example.documentapp.data.CvDocumentInfo
 import com.example.documentapp.data.DocumentDisplayItem
 import com.example.documentapp.data.DocumentInteractor
+import com.example.documentapp.data.Result
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposables
-import timber.log.Timber
 import javax.inject.Inject
 
 class DocumentPresenter @Inject constructor(
@@ -25,14 +25,19 @@ class DocumentPresenter @Inject constructor(
         disposable = docInteractor.getCvDocument(filename)
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe { view?.showProgress() }
-            .subscribe(::onData, ::onError)
+            .subscribe { result ->
+                when (result) {
+                    is Result.Success -> onData(result.data)
+                    Result.Error -> onError()
+                }
+            }
     }
 
     private fun onData(data: List<DocumentDisplayItem>) {
         view?.showData(data)
     }
 
-    private fun onError(error: Throwable) {
+    private fun onError() {
         view?.showError()
     }
 

@@ -9,7 +9,7 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import javax.inject.Inject
 
-class GithubRepository @Inject constructor(
+class GithubDocRepository @Inject constructor(
     private val api: GitHubApi,
     private val base64Decoder: Base64Decoder,
     private val jsonObjectMapper: ObjectMapper

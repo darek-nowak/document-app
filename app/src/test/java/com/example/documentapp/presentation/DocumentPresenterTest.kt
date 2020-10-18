@@ -1,9 +1,12 @@
 package com.example.documentapp.presentation
 
 import com.example.documentapp.data.CvDocumentInfo
-import com.example.documentapp.data.DocumentInteractor
 import com.example.documentapp.data.DocumentDisplayItem
-import com.nhaarman.mockito_kotlin.*
+import com.example.documentapp.data.DocumentInteractor
+import com.example.documentapp.data.Result
+import com.nhaarman.mockito_kotlin.given
+import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.verify
 import io.reactivex.Single
 import io.reactivex.android.plugins.RxAndroidPlugins
 import io.reactivex.schedulers.Schedulers
@@ -25,7 +28,7 @@ internal class DocumentPresenterTest {
     @Test
     fun `call document interactor and show returned data when data arrived`() {
         given(interactor.getCvDocument(DOC_FILENAME)).willReturn(
-            Single.just(SAMPLE_DOC_DATA)
+            Single.just(Result.Success(SAMPLE_DOC_DATA))
         )
 
         presenter.attachView(view, CV_DOC_INFO)
@@ -36,7 +39,7 @@ internal class DocumentPresenterTest {
     @Test
     fun `call document interactor and show error when error occurred`() {
         given(interactor.getCvDocument(DOC_FILENAME)).willReturn(
-            Single.error(Throwable("Error"))
+            Single.just(Result.Error)
         )
 
         presenter.attachView(view, CV_DOC_INFO)
@@ -47,7 +50,7 @@ internal class DocumentPresenterTest {
     @Test
     fun `show progress when loading data`() {
         given(interactor.getCvDocument(DOC_FILENAME)).willReturn(
-            Single.just(SAMPLE_DOC_DATA)
+            Single.just(Result.Success(SAMPLE_DOC_DATA))
         )
 
         presenter.attachView(view, CV_DOC_INFO)

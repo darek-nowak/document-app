@@ -2,6 +2,7 @@ package com.example.documentapp.presentation
 
 import com.example.documentapp.data.CvDocumentInfo
 import com.example.documentapp.data.DocumentListsInteractor
+import com.example.documentapp.data.Result
 import com.nhaarman.mockito_kotlin.given
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
@@ -25,18 +26,18 @@ internal class DocumentsListPresenterTest {
     @Test
     fun `fetch documents list on attach and show returned data`() {
         given(interactor.getCvDocumentsList()).willReturn(
-            Single.just(listOf(CvDocumentInfo("sir_richard.json", "Sir Richard")))
+            Single.just(Result.Success(SAMPLE_CV_DOCS_LIST))
         )
 
         presenter.attachView(view)
 
-        verify(view).showDocsListData(listOf(CvDocumentInfo("sir_richard.json", "Sir Richard")))
+        verify(view).showDocsListData(SAMPLE_CV_DOCS_LIST)
     }
 
     @Test
     fun `show error on interactor returning error`() {
         given(interactor.getCvDocumentsList()).willReturn(
-            Single.error(Throwable(""))
+            Single.just(Result.Error)
         )
 
         presenter.attachView(view)
@@ -47,11 +48,15 @@ internal class DocumentsListPresenterTest {
     @Test
     fun `show progress when loading data`() {
         given(interactor.getCvDocumentsList()).willReturn(
-            Single.just(listOf(CvDocumentInfo("sir_richard.json", "Sir Richard")))
+            Single.just(Result.Success(SAMPLE_CV_DOCS_LIST))
         )
 
         presenter.attachView(view)
 
         verify(view).showProgress()
+    }
+
+    private companion object {
+        val SAMPLE_CV_DOCS_LIST = listOf(CvDocumentInfo("sir_richard.json", "Sir Richard"))
     }
 }

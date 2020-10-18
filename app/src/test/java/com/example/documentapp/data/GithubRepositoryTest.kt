@@ -13,7 +13,7 @@ internal class GithubRepositoryTest {
     private val base64Decoder: Base64Decoder = mock()
     private val jsonObjectMapper = ObjectMapper()
 
-    private val repository = GithubRepository(
+    private val repository = GithubDocRepository(
         api,
         base64Decoder,
         jsonObjectMapper

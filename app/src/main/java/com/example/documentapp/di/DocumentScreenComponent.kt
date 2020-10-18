@@ -21,7 +21,7 @@ interface DocumentScreenComponent {
     interface Factory {
         fun create(): DocumentScreenComponent
     }
-    
+
     fun inject(documentFragment: DocumentFragment)
     fun inject(documentsListFragment: DocumentsListFragment)
 }

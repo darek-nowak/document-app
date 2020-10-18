@@ -1,15 +1,30 @@
 package com.example.documentapp.data
 
 import android.os.Parcelable
+import com.example.documentapp.di.DocumentActivityScope
 import io.reactivex.Single
+import io.reactivex.disposables.Disposables
+import io.reactivex.subjects.BehaviorSubject
 import kotlinx.android.parcel.Parcelize
 import javax.inject.Inject
 
+@DocumentActivityScope
 class DocumentListsInteractor @Inject constructor(
-    private val docRepository: GithubRepository
+    private val docRepository: GithubDocRepository
 ) {
-    fun getCvDocumentsList(): Single<List<CvDocumentInfo>> =
-        docRepository.fetchDocumentsList()
+    private val subject = BehaviorSubject.create<Result<List<CvDocumentInfo>>>()
+    private var disposable = Disposables.disposed()
+
+    fun getCvDocumentsList(): Single<Result<List<CvDocumentInfo>>> {
+        return subject.doOnSubscribe {
+            if (!subject.hasValue()) subscribeToSource()
+        }
+            .doOnDispose { disposable.dispose() }
+            .firstOrError()
+    }
+
+    private fun subscribeToSource() {
+        disposable = docRepository.fetchDocumentsList()
             .map { files ->
                 files.map {
                     CvDocumentInfo(
@@ -18,6 +33,11 @@ class DocumentListsInteractor @Inject constructor(
                     )
                 }
             }
+            .subscribe(
+                { data -> subject.onNext(Result.Success(data)) },
+                { _ -> subject.onNext(Result.Error) }
+            )
+    }
 
     private fun String.toApplicantName() =
         removeSuffix(".json")
@@ -26,4 +46,9 @@ class DocumentListsInteractor @Inject constructor(
 }
 
 @Parcelize
-data class CvDocumentInfo(val filename: String, val name: String): Parcelable
+data class CvDocumentInfo(val filename: String, val name: String) : Parcelable
+
+sealed class Result<out T> {
+    data class Success<T>(val data: T) : Result<T>()
+    object Error : Result<Nothing>()
+}
